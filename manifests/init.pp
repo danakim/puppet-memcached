@@ -1,0 +1,55 @@
+#
+# Class: memcached
+#
+# A module to install and configure memcached on a node.
+# It defaults to the usual memcached configuration settings but they can all be changed
+# by passing the parameters to the class.
+#
+# Example:
+# class { "memcached":
+#   memcached_port => '11211',
+#   maxconn        => '2048',
+#   cachesize      => '20000',
+# }
+#
+
+class memcached (
+    $memcached_port = '11211',
+    $maxconn = '1024',
+    $cachesize = '10000'
+    ) {
+
+    package{ "memcached":
+        ensure => installed
+    }
+
+    $memcached_config_file = $::operatingsystem ? {
+        # FIXME: Debian based distros not tested yet
+        /Debian|Ubuntu/         => "/etc/memcached.conf",
+        /RedHat/CentOs/Fedora/  => "/etc/sysconfig/memcached",
+        default                 => "/etc/sysconfig/memcached"
+    }
+
+    file {
+        "$memcached_config_file":
+            mode    => 0444,
+            owner   => root,
+            group   => root,
+            ensure  => present,
+            content => template("memcached/memcached.sysconfig.erb"),
+            require => Package["memcached"];
+        "/etc/init.d/memcached":
+            mode    => 755,
+            owner   => root,
+            group   => root,
+            source  => "puppet:///modules/memcached/memcached.init";
+    }
+
+    service { "memcached":
+        ensure      => true,
+        enable      => true,
+        hasstatus   => true,
+        hasrestart  => true,
+        require     => [File["$memcached_config_file"],Package["memcached"]],
+    }
+}
