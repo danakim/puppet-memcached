@@ -1,8 +1,17 @@
 # This file is managed by puppet!
 # Module: memcached
 
-PORT="11211"
-USER="nobody"
-MAXCONN="<%= maxconn %>"
-CACHESIZE="<%= cachesize %>"
-OPTIONS=""
+-d
+
+logfile /var/log/memcached.log
+
+-l 127.0.0.1
+
+-p 11211
+
+-u nobody
+
+-c <%= maxconn %>
+
+-m <%= cachesize %>
+

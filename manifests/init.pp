@@ -26,7 +26,7 @@ class memcached (
     $memcached_config_file = $::operatingsystem ? {
         # FIXME: Debian based distros not tested yet
         /Debian|Ubuntu/         => "/etc/memcached.conf",
-        /RedHat/CentOs/Fedora/  => "/etc/sysconfig/memcached",
+        /RedHat|CentOs|Fedora/  => "/etc/sysconfig/memcached",
         default                 => "/etc/sysconfig/memcached"
     }
 
@@ -37,12 +37,7 @@ class memcached (
             group   => root,
             ensure  => present,
             content => template("memcached/memcached.sysconfig.erb"),
-            require => Package["memcached"];
-        "/etc/init.d/memcached":
-            mode    => 755,
-            owner   => root,
-            group   => root,
-            source  => "puppet:///modules/memcached/memcached.init";
+            require => Package["memcached"],
     }
 
     service { "memcached":
