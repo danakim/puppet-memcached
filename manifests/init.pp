@@ -30,13 +30,18 @@ class memcached (
         default                 => "/etc/sysconfig/memcached"
     }
 
+    $memcached_template_file = $::operatingsystem ? {
+        /Debian|Ubuntu/         => "memcached/memcached.debian.erb",
+        default                 => "memcached/memcached.sysconfig.erb"
+    }
+
     file {
         "$memcached_config_file":
             mode    => 0444,
             owner   => root,
             group   => root,
             ensure  => present,
-            content => template("memcached/memcached.sysconfig.erb"),
+            content => template($memcached_template_file),
             require => Package["memcached"],
     }
 
