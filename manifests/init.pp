@@ -16,10 +16,10 @@
 class memcached (
     $memcached_port = '11211',
     $maxconn = '1024',
-    $cachesize = '10000'
+    $cachesize = '64'
     ) {
 
-    package{ "memcached":
+    package { "memcached":
         ensure => installed
     }
 
@@ -27,7 +27,7 @@ class memcached (
         # FIXME: Debian based distros not tested yet
         /Debian|Ubuntu/         => "/etc/memcached.conf",
         /RedHat|CentOs|Fedora/  => "/etc/sysconfig/memcached",
-        default                 => "/etc/sysconfig/memcached"
+        default                 => "/etc/memcached.conf"
     }
 
     $memcached_template_file = $::operatingsystem ? {
