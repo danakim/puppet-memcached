@@ -1,8 +1,8 @@
 # This file is managed by puppet!
 # Module: memcached
 
-PORT="11211"
-USER="nobody"
+PORT="<%= memcached_port %>"
+USER="<%= user %>"
 MAXCONN="<%= maxconn %>"
 CACHESIZE="<%= cachesize %>"
-OPTIONS=""
+OPTIONS="<%= extra %>"

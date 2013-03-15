@@ -3,15 +3,16 @@
 
 -d
 
-logfile /var/log/memcached.log
+logfile <%= logfile %>
 
--l 127.0.0.1
+-l <%= listen_address %>
 
--p 11211
+-p <%= memcached_port %>
 
--u nobody
+-u <%= user %>
 
 -c <%= maxconn %>
 
 -m <%= cachesize %>
 
+<%= extra %>
