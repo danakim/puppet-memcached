@@ -16,7 +16,11 @@
 class memcached (
     $memcached_port = '11211',
     $maxconn = '1024',
-    $cachesize = '64'
+    $cachesize = '64',
+    $user = 'nobody',
+    $listen_address = '127.0.0.1',
+    $logfile = '/var/log/memcached.log',
+    $extra = '',
     ) {
 
     package { "memcached":
@@ -24,7 +28,6 @@ class memcached (
     }
 
     $memcached_config_file = $::operatingsystem ? {
-        # FIXME: Debian based distros not tested yet
         /Debian|Ubuntu/         => "/etc/memcached.conf",
         /RedHat|CentOs|Fedora/  => "/etc/sysconfig/memcached",
         default                 => "/etc/memcached.conf"
